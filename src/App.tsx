@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import "./App.css";
+import { supabase } from "./supabaseClient";
 import SunriseBackground from "./SunriseBackground";
-
-// Edit this to your actual retirement date/time.
-const RETIREMENT_DATE = new Date("2026-08-24T16:00:00");
+import "./App.css";
 
 function getRemaining(target: Date) {
   const diff = Math.max(0, target.getTime() - Date.now());
@@ -17,22 +15,39 @@ function getRemaining(target: Date) {
   };
 }
 
-const formattedDate = RETIREMENT_DATE.toLocaleDateString("en-US", {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
-
 export default function App() {
-  const [remaining, setRemaining] = useState(() => getRemaining(RETIREMENT_DATE));
+  const [retirementDate, setRetirementDate] = useState<Date | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [remaining, setRemaining] = useState(() => getRemaining(new Date()));
 
+  // Fetch the date once on mount.
   useEffect(() => {
+    async function fetchDate() {
+      const { data, error } = await supabase
+        .from("retirement_settings")
+        .select("retirement_date")
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (error || !data) {
+        setError("Couldn't load the retirement date.");
+        return;
+      }
+      setRetirementDate(new Date(data.retirement_date));
+    }
+    fetchDate();
+  }, []);
+
+  // Tick every second once we have a date.
+  useEffect(() => {
+    if (!retirementDate) return;
+    setRemaining(getRemaining(retirementDate));
     const id = setInterval(() => {
-      setRemaining(getRemaining(RETIREMENT_DATE));
+      setRemaining(getRemaining(retirementDate));
     }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [retirementDate]);
 
   const units = useMemo(
     () => [
@@ -44,30 +59,44 @@ export default function App() {
     [remaining]
   );
 
+  const formattedDate = retirementDate
+    ? retirementDate.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "";
+
   return (
     <main className="page">
       <SunriseBackground />
       <div className="card">
-        <p className="eyebrow">Matthew's Retirement</p>
-        <h1 className="headline">
-          {remaining.done ? "Today's the day." : "Free as of"}
-        </h1>
-        <p className="date">{formattedDate}</p>
+        <p className="eyebrow">Retirement</p>
 
-        <div className="ledger">
-          {units.map((unit) => (
-            <div className="unit" key={unit.label}>
-              <span className="unit-value">
-                {String(unit.value).padStart(2, "0")}
-              </span>
-              <span className="unit-label">{unit.label}</span>
+        {error ? (
+          <h1 className="headline">{error}</h1>
+        ) : !retirementDate ? (
+          <h1 className="headline">Loading…</h1>
+        ) : (
+          <>
+            <h1 className="headline">
+              {remaining.done ? "Today's the day." : "Free as of"}
+            </h1>
+            <p className="date">{formattedDate}</p>
+
+            <div className="ledger">
+              {units.map((unit) => (
+                <div className="unit" key={unit.label}>
+                  <span className="unit-value">
+                    {String(unit.value).padStart(2, "0")}
+                  </span>
+                  <span className="unit-label">{unit.label}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-
-        <div className="horizon" aria-hidden="true">
-          <div className="sun" />
-        </div>
+          </>
+        )}
       </div>
     </main>
   );
