@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
+import SunriseBackground from "./SunriseBackground";
 
 // Edit this to your actual retirement date/time.
 const RETIREMENT_DATE = new Date("2026-08-24T16:00:00");
@@ -45,6 +46,7 @@ export default function App() {
 
   return (
     <main className="page">
+      <SunriseBackground />
       <div className="card">
         <p className="eyebrow">Matthew's Retirement</p>
         <h1 className="headline">
