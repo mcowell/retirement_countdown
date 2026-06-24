@@ -4,7 +4,7 @@ import "./App.css";
 // Edit this to your actual retirement date/time.
 const RETIREMENT_DATE = new Date("2026-08-24T16:00:00");
 
-function getRemaining(target) {
+function getRemaining(target: Date) {
   const diff = Math.max(0, target.getTime() - Date.now());
   const totalSeconds = Math.floor(diff / 1000);
   return {
