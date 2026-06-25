@@ -1,8 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
 
-console.log("API sees URL:", process.env.VITE_PUBLIC_SUPABASE_URL);
-
 const supabaseAdmin = createClient(
   process.env.VITE_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -23,7 +21,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { data: existing, error: fetchError } = await supabaseAdmin
     .from("retirement_settings")
-    .select("id")
+    .select("uuid")
     .order("updated_at", { ascending: false })
     .limit(1)
     .single();
@@ -39,7 +37,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       label: label ?? "Retirement",
       updated_at: new Date().toISOString(),
     })
-    .eq("id", existing.id);
+    .eq("uuid", existing.uuid);
 
   if (updateError) {
     return res.status(500).json({ error: updateError.message });
