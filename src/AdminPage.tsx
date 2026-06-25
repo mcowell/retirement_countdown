@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import "./AdminPage.css";
 import Nav from "./Nav";
 import "./Nav.css";
+import Footer from "./Footer";
+import "./Footer.css";
 
 export default function AdminPage() {
   const [date, setDate] = useState("");
@@ -77,6 +79,7 @@ export default function AdminPage() {
           )}
         </form>
       </div>
+      <Footer />
     </main>
   );
 }

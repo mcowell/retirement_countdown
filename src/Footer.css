@@ -1,0 +1,19 @@
+.site-footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 1.5rem 1.5rem;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+.site-footer__link {
+  font-size: 0.75rem;
+  color: #6b7890;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.site-footer__link:hover {
+  color: #f4b860;
+}

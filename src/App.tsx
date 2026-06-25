@@ -4,6 +4,8 @@ import SunriseBackground from "./SunriseBackground";
 import "./App.css";
 import Nav from "./Nav";
 import "./Nav.css";
+import Footer from "./Footer";
+import "./Footer.css";
 
 function getRemaining(target: Date) {
   const diff = Math.max(0, target.getTime() - Date.now());
@@ -58,7 +60,7 @@ export default function App() {
       { label: "Minutes", value: remaining.minutes },
       { label: "Seconds", value: remaining.seconds },
     ],
-    [remaining]
+    [remaining],
   );
 
   const formattedDate = retirementDate
@@ -75,34 +77,35 @@ export default function App() {
       <Nav current="main" />
       <SunriseBackground />
       <div className="content">
-      <div className="card">
-        <p className="eyebrow">Retirement</p>
+        <div className="card">
+          <p className="eyebrow">Retirement</p>
 
-        {error ? (
-          <h1 className="headline">{error}</h1>
-        ) : !retirementDate ? (
-          <h1 className="headline">Loading…</h1>
-        ) : (
-          <>
-            <h1 className="headline">
-              {remaining.done ? "Today's the day." : "Free as of"}
-            </h1>
-            <p className="date">{formattedDate}</p>
+          {error ? (
+            <h1 className="headline">{error}</h1>
+          ) : !retirementDate ? (
+            <h1 className="headline">Loading…</h1>
+          ) : (
+            <>
+              <h1 className="headline">
+                {remaining.done ? "Today's the day." : "Free as of"}
+              </h1>
+              <p className="date">{formattedDate}</p>
 
-            <div className="ledger">
-              {units.map((unit) => (
-                <div className="unit" key={unit.label}>
-                  <span className="unit-value">
-                    {String(unit.value).padStart(2, "0")}
-                  </span>
-                  <span className="unit-label">{unit.label}</span>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
+              <div className="ledger">
+                {units.map((unit) => (
+                  <div className="unit" key={unit.label}>
+                    <span className="unit-value">
+                      {String(unit.value).padStart(2, "0")}
+                    </span>
+                    <span className="unit-label">{unit.label}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
-      </div>
+      <Footer />
     </main>
   );
 }
