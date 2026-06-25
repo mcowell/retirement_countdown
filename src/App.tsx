@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabaseClient";
 import SunriseBackground from "./SunriseBackground";
 import "./App.css";
+import Nav from "./Nav";
+import "./Nav.css";
 
 function getRemaining(target: Date) {
   const diff = Math.max(0, target.getTime() - Date.now());
@@ -70,7 +72,9 @@ export default function App() {
 
   return (
     <main className="page">
+      <Nav current="main" />
       <SunriseBackground />
+      <div className="content">
       <div className="card">
         <p className="eyebrow">Retirement</p>
 
@@ -97,6 +101,7 @@ export default function App() {
             </div>
           </>
         )}
+      </div>
       </div>
     </main>
   );

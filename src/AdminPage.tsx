@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import "./AdminPage.css";
+import Nav from "./Nav";
+import "./Nav.css";
 
 export default function AdminPage() {
   const [date, setDate] = useState("");
-  const [status, setStatus] = useState<"idle" | "saving" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "saving" | "success" | "error">(
+    "idle",
+  );
   const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -45,25 +49,34 @@ export default function AdminPage() {
 
   return (
     <main className="admin-page">
-      <form onSubmit={handleSubmit} className="admin-card">
-        <p className="admin-eyebrow">Admin</p>
-        <h1 className="admin-headline">Set a new date</h1>
+      <Nav current="admin" />
+      <div className="admin-content">
+        <form onSubmit={handleSubmit} className="admin-card">
+          <p className="admin-eyebrow">Admin</p>
+          <h1 className="admin-headline">Set a new date</h1>
 
-        <input
-          ref={inputRef}
-          type="datetime-local"
-          className="admin-date-input"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
+          <input
+            ref={inputRef}
+            type="datetime-local"
+            className="admin-date-input"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+          />
 
-        <button type="submit" className="admin-button" disabled={status === "saving"}>
-          {status === "saving" ? "Saving…" : "Save"}
-        </button>
+          <button
+            type="submit"
+            className="admin-button"
+            disabled={status === "saving"}
+          >
+            {status === "saving" ? "Saving…" : "Save"}
+          </button>
 
-        {message && <p className={`admin-status admin-status--${status}`}>{message}</p>}
-      </form>
+          {message && (
+            <p className={`admin-status admin-status--${status}`}>{message}</p>
+          )}
+        </form>
+      </div>
     </main>
   );
 }

@@ -1,11 +1,17 @@
 .admin-page {
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.25rem;
+  flex-direction: column;
   background: #0b1220;
   font-family: "Inter", system-ui, sans-serif;
+}
+
+.admin-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.25rem 2rem;
 }
 
 .admin-card {

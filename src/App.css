@@ -16,11 +16,17 @@ body {
   overflow: hidden;
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.25rem;
+  flex-direction: column;
   font-family: "Inter", system-ui, sans-serif;
   color: #c8d3e0;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.25rem 2rem;
 }
 
 .bg-scene {
