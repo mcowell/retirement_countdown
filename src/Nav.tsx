@@ -9,7 +9,6 @@ const ADMIN_EMAIL = "mcowell@gmail.com";
 export default function Nav({ current }: NavProps) {
   const { session, signInWithGoogle, signOut } = useAuth();
   const isAdmin = session?.user?.email === ADMIN_EMAIL;
-  console.log("Nav session:", session);
 
   const mainClass = current === "main" ? "site-nav__link is-active" : "site-nav__link";
   const adminClass = current === "admin" ? "site-nav__link is-active" : "site-nav__link";
