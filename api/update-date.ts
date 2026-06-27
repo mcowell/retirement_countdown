@@ -11,6 +11,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  // Verify the caller's identity using their token (not the service role key —
+  // we just need to know WHO is asking, which requires checking their JWT).
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.replace("Bearer ", "");
+  if (!token) {
+    return res.status(401).json({ error: "Missing auth token" });
+  }
+
+  const { data: userData, error: userError } = await supabaseAdmin.auth.getUser(token);
+  if (userError || !userData?.user) {
+    return res.status(401).json({ error: "Invalid or expired session" });
+  }
+
+  if (userData.user.email !== process.env.ADMIN_EMAIL) {
+    return res.status(403).json({ error: "Not authorized" });
+  }
+
   const { retirement_date, label } = req.body ?? {};
   if (!retirement_date) {
     return res.status(400).json({ error: "retirement_date is required" });

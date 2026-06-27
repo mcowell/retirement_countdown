@@ -5,6 +5,10 @@ import "./Nav.css";
 import Footer from "./Footer";
 import "./Footer.css";
 
+import { useAuth } from "./useAuth";
+
+const ADMIN_EMAIL = "mcowell@gmail.com";
+
 export default function AdminPage() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState<"idle" | "saving" | "success" | "error">(
@@ -29,11 +33,15 @@ export default function AdminPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!session) return; 
     setStatus("saving");
     try {
       const res = await fetch("/api/update-date", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify({
           retirement_date: new Date(date).toISOString(),
           label: "Retirement",
@@ -47,6 +55,48 @@ export default function AdminPage() {
       setStatus("error");
       setMessage(err instanceof Error ? err.message : "Something went wrong.");
     }
+  }
+
+  const { session, loading: authLoading, signInWithGoogle } = useAuth();
+
+  if (authLoading) {
+    return (
+      <main className="admin-page">
+        <Nav current="admin" />
+        <div className="admin-content">
+          <p className="admin-status">Checking sign-in…</p>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
+  if (!session) {
+    return (
+      <main className="admin-page">
+        <Nav current="admin" />
+        <div className="admin-content">
+          <button className="admin-button" onClick={signInWithGoogle}>
+            Sign in with Google
+          </button>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
+  if (session.user.email !== ADMIN_EMAIL) {
+    return (
+      <main className="admin-page">
+        <Nav current="admin" />
+        <div className="admin-content">
+          <p className="admin-status admin-status--error">
+            You're signed in, but this account isn't an admin.
+          </p>
+        </div>
+        <Footer />
+      </main>
+    );
   }
 
   return (
