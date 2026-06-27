@@ -18,7 +18,22 @@
 
 .site-nav__links {
   display: flex;
+  align-items: center;
   gap: 1.25rem;
+}
+
+.site-nav__button {
+  background: none;
+  border: none;
+  font: inherit;
+  color: #8d9bb0;
+  cursor: pointer;
+  padding: 0;
+  line-height: inherit;
+}
+
+.site-nav__button:hover {
+  color: #f7f2e7;
 }
 
 .site-nav__link {
@@ -38,12 +53,4 @@
 .site-nav__link.is-active {
   color: #f4b860;
   border-bottom-color: #f4b860;
-}
-
-.site-nav__button {
-  background: none;
-  border: none;
-  font-family: inherit;
-  cursor: pointer;
-  padding: 0;
 }

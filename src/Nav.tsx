@@ -17,12 +17,14 @@ export default function Nav({ current }: NavProps) {
     <nav className="site-nav">
       <span className="site-nav__brand">Retirement</span>
       <div className="site-nav__links">
-        <a href="/" className={mainClass}>Main</a>
-        {isAdmin && <a href="/admin" className={adminClass}>Admin</a>}
         {session ? (
-          <button className="site-nav__link site-nav__button" onClick={signOut}>
-            Sign out
-          </button>
+          <>
+            <a href="/" className={mainClass}>Main</a>
+            {isAdmin && <a href="/admin" className={adminClass}>Admin</a>}
+            <button className="site-nav__link site-nav__button" onClick={signOut}>
+              Sign out
+            </button>
+          </>
         ) : (
           <button className="site-nav__link site-nav__button" onClick={signInWithGoogle}>
             Sign in
